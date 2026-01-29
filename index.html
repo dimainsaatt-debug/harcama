@@ -1,158 +1,160 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="h-full">
 <head>
-<meta charset="UTF-8">
-<title>Dima İnşaat | Şantiye Yönetimi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dima İnşaat - Genel Harcamalar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #111;
+      color: #fff;
+    }
+    .expense-row:hover { background-color: #222; }
+    .btn-primary { transition: all 0.2s ease; }
+    .btn-primary:hover { background-color: #333; }
+    .category-badge { padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.85rem; }
+    table th, table td { border-bottom: 1px solid #333; }
+  </style>
 </head>
+<body class="h-full">
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-white mb-4">🏗️ Dima İnşaat - Genel Harcamalar</h1>
+    
+    <!-- Toplam -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-gray-900 rounded-xl p-4 text-center">
+        <p class="text-gray-400 text-sm">Toplam Harcama</p>
+        <p id="total-amount" class="text-xl font-bold">₺0,00</p>
+      </div>
+      <div class="bg-gray-900 rounded-xl p-4 text-center">
+        <p class="text-gray-400 text-sm">Kayıt Sayısı</p>
+        <p id="total-count" class="text-xl font-bold">0</p>
+      </div>
+      <div class="bg-gray-900 rounded-xl p-4 text-center">
+        <p class="text-gray-400 text-sm">En Yüksek</p>
+        <p id="max-amount" class="text-xl font-bold">₺0,00</p>
+      </div>
+    </div>
 
-<body class="bg-black text-white">
+    <!-- Harcama Ekle -->
+    <div class="bg-gray-900 rounded-xl p-6 mb-6">
+      <h2 class="text-lg font-semibold mb-4">➕ Yeni Harcama Ekle</h2>
+      <form id="expense-form" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label for="description" class="text-gray-400 text-sm mb-1 block">Açıklama</label>
+          <input type="text" id="description" placeholder="Ne için harcandı?" class="w-full bg-gray-800 px-4 py-2 rounded-lg text-white placeholder-gray-500">
+        </div>
+        <div>
+          <label for="amount" class="text-gray-400 text-sm mb-1 block">Tutar (₺)</label>
+          <input type="number" id="amount" placeholder="0,00" step="0.01" min="0" class="w-full bg-gray-800 px-4 py-2 rounded-lg text-white placeholder-gray-500">
+        </div>
+        <div>
+          <label for="category" class="text-gray-400 text-sm mb-1 block">Kategori</label>
+          <select id="category" class="w-full bg-gray-800 px-4 py-2 rounded-lg text-white">
+            <option value="Beton">🧱 Beton</option>
+            <option value="Demir">🛠️ Demir</option>
+            <option value="İşçilik">👷 İşçilik</option>
+            <option value="Nakliye">🚚 Nakliye</option>
+            <option value="Malzeme">📦 Malzeme</option>
+            <option value="Diğer">💼 Diğer</option>
+          </select>
+        </div>
+        <div>
+          <label for="date" class="text-gray-400 text-sm mb-1 block">Tarih</label>
+          <input type="date" id="date" class="w-full bg-gray-800 px-4 py-2 rounded-lg text-white">
+        </div>
+        <div class="md:col-span-4">
+          <button type="submit" class="btn-primary w-full bg-white text-black font-semibold py-2 rounded-lg mt-2">Ekle</button>
+        </div>
+      </form>
+    </div>
 
-<!-- GİRİŞ -->
-<div id="login" class="min-h-screen flex items-center justify-center">
-  <div class="border border-gray-700 p-6 rounded-xl w-80">
-    <h2 class="text-xl font-bold mb-4">Dima İnşaat</h2>
-    <input id="pass" type="password" placeholder="Şifre"
-      class="w-full bg-black border border-gray-600 p-3 rounded mb-4">
-    <button onclick="login()" class="w-full border border-white p-3 rounded hover:bg-white hover:text-black">
-      Giriş
-    </button>
+    <!-- Harcama Tablosu -->
+    <div class="bg-gray-900 rounded-xl p-4">
+      <table class="w-full text-left">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 text-gray-400">Açıklama</th>
+            <th class="px-4 py-2 text-gray-400">Kategori</th>
+            <th class="px-4 py-2 text-gray-400">Tarih</th>
+            <th class="px-4 py-2 text-gray-400 text-right">Tutar</th>
+            <th class="px-4 py-2 text-gray-400 text-center">Sil</th>
+          </tr>
+        </thead>
+        <tbody id="expense-list">
+          <!-- Kayıtlar buraya gelecek -->
+        </tbody>
+      </table>
+      <p id="empty-state" class="text-gray-500 text-center mt-4">Henüz harcama kaydı yok.</p>
+    </div>
   </div>
-</div>
 
-<!-- UYGULAMA -->
-<div id="app" class="hidden">
+  <script>
+    let expenses = [];
 
-<header class="border-b border-gray-700 p-6">
-  <h1 class="text-3xl font-bold">DİMA İNŞAAT</h1>
-  <p class="text-gray-400">Şantiye Yönetim Sistemi • İç Kullanım</p>
-</header>
+    function formatCurrency(amount){
+      return new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY'}).format(amount);
+    }
 
-<main class="max-w-7xl mx-auto p-6 space-y-12">
+    function updateSummary(){
+      const total = expenses.reduce((sum,e)=>sum+e.amount,0);
+      const max = expenses.length>0?Math.max(...expenses.map(e=>e.amount)):0;
+      document.getElementById('total-amount').textContent = formatCurrency(total);
+      document.getElementById('total-count').textContent = expenses.length;
+      document.getElementById('max-amount').textContent = formatCurrency(max);
+    }
 
-<!-- ÖZET -->
-<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-  <div class="border border-gray-700 p-4 rounded">Toplam Harcama: <span id="sumExpense">₺0</span></div>
-  <div class="border border-gray-700 p-4 rounded">Toplam Beton: <span id="sumBeton">0 m³</span></div>
-  <div class="border border-gray-700 p-4 rounded">Toplam Demir: <span id="sumDemir">0 kg</span></div>
-</section>
+    function renderExpenses(){
+      const listEl = document.getElementById('expense-list');
+      const emptyEl = document.getElementById('empty-state');
+      listEl.innerHTML='';
+      if(expenses.length===0){ emptyEl.classList.remove('hidden'); return; }
+      emptyEl.classList.add('hidden');
+      expenses.forEach((e,i)=>{
+        const row=document.createElement('tr');
+        row.className='expense-row';
+        row.innerHTML=`
+          <td class="px-4 py-2">${e.description}</td>
+          <td class="px-4 py-2"><span class="category-badge bg-gray-800 text-white">${e.category}</span></td>
+          <td class="px-4 py-2">${e.date}</td>
+          <td class="px-4 py-2 text-right">${formatCurrency(e.amount)}</td>
+          <td class="px-4 py-2 text-center">
+            <button onclick="deleteExpense(${i})" class="text-red-500 font-semibold">Sil</button>
+          </td>
+        `;
+        listEl.appendChild(row);
+      });
+    }
 
-<!-- DEMİR DEFTERİ -->
-<section class="border border-gray-700 rounded p-6">
-<h2 class="text-xl mb-4">🧱 Demir Defteri</h2>
-<form id="demirForm" class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
-<input type="date" required id="dDate" class="input">
-<input placeholder="Kat / Bölge" required id="dArea" class="input">
-<select id="dType" class="input">
-<option>Ø8</option><option>Ø10</option><option>Ø12</option><option>Hasır</option>
-</select>
-<input type="number" placeholder="kg" required id="dKg" class="input">
-<input placeholder="Tedarikçi" id="dSup" class="input">
-<button class="btn">Ekle</button>
-</form>
-<table class="w-full text-sm"><tbody id="demirList"></tbody></table>
-</section>
+    function deleteExpense(index){
+      if(confirm('Bu kaydı silmek istiyor musunuz?')){
+        expenses.splice(index,1);
+        renderExpenses();
+        updateSummary();
+      }
+    }
 
-<!-- İŞÇİLİK -->
-<section class="border border-gray-700 rounded p-6">
-<h2 class="text-xl mb-4">👷 İşçilik Takibi</h2>
-<form id="isciForm" class="grid grid-cols-1 md:grid-cols-7 gap-3 mb-4">
-<input placeholder="Usta" required id="iName" class="input">
-<input placeholder="İş Türü" required id="iJob" class="input">
-<input placeholder="Günlük / Parça" id="iType" class="input">
-<input type="number" placeholder="Hakediş" required id="iTotal" class="input">
-<input type="number" placeholder="Ödenen" required id="iPaid" class="input">
-<button class="btn col-span-2">Ekle</button>
-</form>
-<table class="w-full text-sm"><tbody id="isciList"></tbody></table>
-</section>
+    document.getElementById('expense-form').addEventListener('submit',function(e){
+      e.preventDefault();
+      const desc=document.getElementById('description').value.trim();
+      const amount=parseFloat(document.getElementById('amount').value);
+      const category=document.getElementById('category').value;
+      const date=document.getElementById('date').value;
+      if(!desc||isNaN(amount)||amount<=0||!date){ alert('Lütfen tüm alanları doğru doldurun'); return; }
+      expenses.push({description:desc,amount,category,date});
+      renderExpenses();
+      updateSummary();
+      // formu temizle
+      document.getElementById('description').value='';
+      document.getElementById('amount').value='';
+      document.getElementById('date').value=new Date().toISOString().split('T')[0];
+    });
 
-<!-- NAKLİYE -->
-<section class="border border-gray-700 rounded p-6">
-<h2 class="text-xl mb-4">🚚 Nakliye</h2>
-<form id="nakliyeForm" class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
-<input placeholder="Yük" required id="nLoad" class="input">
-<input placeholder="Nereden" required id="nFrom" class="input">
-<input placeholder="Nereye" required id="nTo" class="input">
-<input placeholder="Plaka" id="nPlate" class="input">
-<input type="number" placeholder="₺" required id="nPrice" class="input">
-<button class="btn">Ekle</button>
-</form>
-<table class="w-full text-sm"><tbody id="nakliyeList"></tbody></table>
-</section>
-
-<!-- ŞANTİYE GÜNLÜĞÜ -->
-<section class="border border-gray-700 rounded p-6">
-<h2 class="text-xl mb-4">🧠 Şantiye Günlüğü</h2>
-<form id="noteForm" class="flex gap-3 mb-4">
-<input type="date" required id="noteDate" class="input w-40">
-<input placeholder="Not" required id="noteText" class="input flex-1">
-<button class="btn">Ekle</button>
-</form>
-<ul id="noteList" class="space-y-2"></ul>
-</section>
-
-</main>
-</div>
-
-<style>
-.input{background:black;border:1px solid #555;padding:10px;border-radius:6px}
-.btn{border:1px solid white;padding:10px;border-radius:6px}
-</style>
-
-<script>
-const db = k => JSON.parse(localStorage.getItem(k)||"[]");
-const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-
-let demir=db("demir"), isci=db("isci"), nakliye=db("nakliye"), notes=db("notes");
-
-function login(){
-  const p=pass.value;
-  if(!localStorage.getItem("pw")) localStorage.setItem("pw",p);
-  if(p===localStorage.getItem("pw")){
-    loginDiv.style.display="none"; app.classList.remove("hidden");
-    render();
-  } else alert("Şifre yanlış");
-}
-
-const loginDiv=document.getElementById("login");
-
-function render(){
-  demirList.innerHTML="";
-  let dSum=0;
-  demir.forEach((x,i)=>{
-    dSum+=x.kg;
-    demirList.innerHTML+=`<tr><td>${x.date}</td><td>${x.area}</td><td>${x.type}</td><td>${x.kg}</td>
-    <td>${x.sup||""}</td><td><button onclick="del('demir',${i})">Sil</button></td></tr>`;
-  });
-  sumDemir.innerText=dSum+" kg";
-
-  isciList.innerHTML="";
-  isci.forEach((x,i)=>{
-    isciList.innerHTML+=`<tr><td>${x.name}</td><td>${x.job}</td>
-    <td>Kalan: ${x.total-x.paid}</td><td><button onclick="del('isci',${i})">Sil</button></td></tr>`;
-  });
-
-  nakliyeList.innerHTML="";
-  nakliye.forEach((x,i)=>{
-    nakliyeList.innerHTML+=`<tr><td>${x.load}</td><td>${x.from}→${x.to}</td><td>${x.price}</td>
-    <td><button onclick="del('nakliye',${i})">Sil</button></td></tr>`;
-  });
-
-  noteList.innerHTML="";
-  notes.forEach((x,i)=>{
-    noteList.innerHTML+=`<li>${x.date} - ${x.text} <button onclick="del('notes',${i})">Sil</button></li>`;
-  });
-}
-
-function del(k,i){
-  if(confirm("Silinsin mi?")){
-    let arr=db(k); arr.splice(i,1); save(k,arr);
-    location.reload();
-  }
-}
-</script>
-
+    // bugünün tarihi
+    document.getElementById('date').value=new Date().toISOString().split('T')[0];
+  </script>
 </body>
 </html>
