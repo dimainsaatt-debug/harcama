@@ -1,173 +1,172 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>İnşaat Harcama Takibi</title>
-
+  <title>Dima İnşaat | Şantiye Takip</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="theme-color" content="#000000">
-
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont;
-    }
-  </style>
 </head>
 
-<body class="bg-black text-white min-h-screen p-6">
-
-<div class="max-w-6xl mx-auto space-y-10">
+<body class="bg-black text-white font-sans">
 
   <!-- HEADER -->
-  <div>
-    <h1 class="text-3xl font-bold tracking-tight">İNŞAAT HARCAMA TAKİBİ</h1>
-    <p class="text-gray-400 mt-1">Sade • Güçlü • Profesyonel</p>
-  </div>
+  <header class="border-b border-gray-700 p-6">
+    <h1 class="text-3xl font-bold tracking-wide">DİMA İNŞAAT</h1>
+    <p class="text-gray-400 mt-1">Şantiye Takip Sistemi • İç Kullanım</p>
+  </header>
 
-  <!-- ÖZET -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
-      <p class="text-gray-400 text-sm">Toplam Harcama</p>
-      <p id="totalAmount" class="text-2xl font-semibold">₺0</p>
-    </div>
-    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
-      <p class="text-gray-400 text-sm">Kayıt Sayısı</p>
-      <p id="totalCount" class="text-2xl font-semibold">0</p>
-    </div>
-    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
-      <p class="text-gray-400 text-sm">En Yüksek Harcama</p>
-      <p id="maxAmount" class="text-2xl font-semibold">₺0</p>
-    </div>
-  </div>
+  <main class="max-w-6xl mx-auto p-6 space-y-10">
 
-  <!-- FORM -->
-  <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
-    <h2 class="text-lg font-medium mb-4">Yeni Harcama Ekle</h2>
+    <!-- ÖZET -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="border border-gray-700 p-5 rounded-xl">
+        <p class="text-gray-400 text-sm">Toplam Harcama</p>
+        <p id="totalExpense" class="text-2xl font-bold mt-1">₺0</p>
+      </div>
+      <div class="border border-gray-700 p-5 rounded-xl">
+        <p class="text-gray-400 text-sm">Toplam Kayıt</p>
+        <p id="expenseCount" class="text-2xl font-bold mt-1">0</p>
+      </div>
+      <div class="border border-gray-700 p-5 rounded-xl">
+        <p class="text-gray-400 text-sm">Toplam Beton</p>
+        <p id="totalConcrete" class="text-2xl font-bold mt-1">0 m³</p>
+      </div>
+    </section>
 
-    <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-6 gap-4">
-      <input id="desc" type="text" placeholder="Açıklama"
-        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white"/>
+    <!-- HARCAMA EKLE -->
+    <section class="border border-gray-700 rounded-xl p-6">
+      <h2 class="text-xl font-semibold mb-4">Harcama Ekle</h2>
 
-      <input id="amount" type="number" placeholder="Tutar ₺"
-        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white"/>
+      <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <input type="text" id="expDesc" placeholder="Açıklama" class="bg-black border border-gray-600 p-3 rounded" required>
+        <input type="number" id="expAmount" placeholder="Tutar (₺)" class="bg-black border border-gray-600 p-3 rounded" required>
+        <select id="expCategory" class="bg-black border border-gray-600 p-3 rounded">
+          <option>İnşaat Malzemesi</option>
+          <option>İşçilik</option>
+          <option>Beton</option>
+          <option>Demir</option>
+          <option>Nakliye</option>
+          <option>Elektrik</option>
+          <option>Su & Tesisat</option>
+          <option>Boya</option>
+          <option>Ruhsat & Resmi</option>
+          <option>Diğer</option>
+        </select>
+        <input type="date" id="expDate" class="bg-black border border-gray-600 p-3 rounded" required>
+        <button class="border border-white rounded p-3 hover:bg-white hover:text-black transition">Ekle</button>
+      </form>
+    </section>
 
-      <select id="category"
-        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white">
-        <option>Malzeme</option>
-        <option>İşçilik</option>
-        <option>Nakliye</option>
-        <option>Beton</option>
-        <option>Demir</option>
-        <option>Elektrik</option>
-        <option>Su / Tesisat</option>
-        <option>Isı Yalıtımı</option>
-        <option>Çatı</option>
-        <option>Kaplama</option>
-        <option>Ruhsat / Vergi</option>
-        <option>Proje / Mimarlık</option>
-        <option>Diğer</option>
-      </select>
+    <!-- HARCAMA LİSTESİ -->
+    <section class="border border-gray-700 rounded-xl overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-900">
+          <tr>
+            <th class="p-3 text-left">Tarih</th>
+            <th class="p-3 text-left">Açıklama</th>
+            <th class="p-3 text-left">Kategori</th>
+            <th class="p-3 text-right">Tutar</th>
+          </tr>
+        </thead>
+        <tbody id="expenseList"></tbody>
+      </table>
+    </section>
 
-      <input id="date" type="date"
-        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white"/>
+    <!-- BETON DÖKÜM DEFTERİ -->
+    <section class="border border-gray-700 rounded-xl p-6">
+      <h2 class="text-xl font-semibold mb-4">Beton Döküm Defteri</h2>
 
-      <button class="md:col-span-2 bg-white text-black rounded-xl font-semibold hover:bg-gray-200">
-        Ekle
-      </button>
-    </form>
-  </div>
+      <form id="concreteForm" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+        <input type="date" id="betonDate" class="bg-black border border-gray-600 p-3 rounded" required>
+        <input type="text" id="betonArea" placeholder="Kat / Bölge" class="bg-black border border-gray-600 p-3 rounded" required>
+        <input type="text" id="betonClass" placeholder="C25 / C30" class="bg-black border border-gray-600 p-3 rounded">
+        <input type="number" id="betonAmount" placeholder="m³" class="bg-black border border-gray-600 p-3 rounded" required>
+        <button class="border border-white rounded p-3 hover:bg-white hover:text-black transition">Ekle</button>
+      </form>
 
-  <!-- TABLO -->
-  <div class="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden">
-    <table class="w-full text-sm">
-      <thead class="bg-neutral-800 text-gray-300">
-        <tr>
-          <th class="p-4 text-left">Açıklama</th>
-          <th class="p-4 text-left">Kategori</th>
-          <th class="p-4 text-left">Tarih</th>
-          <th class="p-4 text-right">Tutar</th>
-          <th class="p-4 text-center">Sil</th>
-        </tr>
-      </thead>
-      <tbody id="list"></tbody>
-    </table>
-  </div>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-900">
+          <tr>
+            <th class="p-3 text-left">Tarih</th>
+            <th class="p-3 text-left">Bölge</th>
+            <th class="p-3 text-left">Sınıf</th>
+            <th class="p-3 text-right">m³</th>
+          </tr>
+        </thead>
+        <tbody id="concreteList"></tbody>
+      </table>
+    </section>
 
-</div>
+  </main>
 
 <script>
-const form = document.getElementById("expenseForm");
-const list = document.getElementById("list");
+  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  const concretes = JSON.parse(localStorage.getItem("concretes")) || [];
 
-const totalAmountEl = document.getElementById("totalAmount");
-const totalCountEl = document.getElementById("totalCount");
-const maxAmountEl = document.getElementById("maxAmount");
+  const expenseList = document.getElementById("expenseList");
+  const concreteList = document.getElementById("concreteList");
 
-let expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
+  function render() {
+    expenseList.innerHTML = "";
+    concreteList.innerHTML = "";
 
-function save() {
-  localStorage.setItem("expenses", JSON.stringify(expenses));
-}
-
-function formatTL(n) {
-  return new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(n);
-}
-
-function render() {
-  list.innerHTML = "";
-  let total = 0;
-  let max = 0;
-
-  expenses
-    .sort((a,b) => new Date(b.date) - new Date(a.date))
-    .forEach((e, i) => {
+    let total = 0;
+    expenses.forEach(e => {
       total += e.amount;
-      if (e.amount > max) max = e.amount;
-
-      const tr = document.createElement("tr");
-      tr.className = "border-t border-neutral-800 hover:bg-neutral-800/50 transition";
-
-      tr.innerHTML = `
-        <td class="p-4">${e.desc}</td>
-        <td class="p-4 text-gray-300">${e.category}</td>
-        <td class="p-4 text-gray-500">${e.date}</td>
-        <td class="p-4 text-right font-medium">${formatTL(e.amount)}</td>
-        <td class="p-4 text-center">
-          <button onclick="removeItem(${i})" class="text-gray-500 hover:text-white">✕</button>
-        </td>
-      `;
-      list.appendChild(tr);
+      expenseList.innerHTML += `
+        <tr class="border-t border-gray-800">
+          <td class="p-3">${e.date}</td>
+          <td class="p-3">${e.desc}</td>
+          <td class="p-3">${e.cat}</td>
+          <td class="p-3 text-right">₺${e.amount}</td>
+        </tr>`;
     });
 
-  totalAmountEl.textContent = formatTL(total);
-  totalCountEl.textContent = expenses.length;
-  maxAmountEl.textContent = formatTL(max);
-}
+    let betonToplam = 0;
+    concretes.forEach(b => {
+      betonToplam += b.amount;
+      concreteList.innerHTML += `
+        <tr class="border-t border-gray-800">
+          <td class="p-3">${b.date}</td>
+          <td class="p-3">${b.area}</td>
+          <td class="p-3">${b.class}</td>
+          <td class="p-3 text-right">${b.amount}</td>
+        </tr>`;
+    });
 
-function removeItem(i) {
-  expenses.splice(i,1);
-  save();
+    document.getElementById("totalExpense").innerText = "₺" + total;
+    document.getElementById("expenseCount").innerText = expenses.length;
+    document.getElementById("totalConcrete").innerText = betonToplam + " m³";
+
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+    localStorage.setItem("concretes", JSON.stringify(concretes));
+  }
+
+  document.getElementById("expenseForm").onsubmit = e => {
+    e.preventDefault();
+    expenses.push({
+      desc: expDesc.value,
+      amount: Number(expAmount.value),
+      cat: expCategory.value,
+      date: expDate.value
+    });
+    e.target.reset();
+    render();
+  };
+
+  document.getElementById("concreteForm").onsubmit = e => {
+    e.preventDefault();
+    concretes.push({
+      date: betonDate.value,
+      area: betonArea.value,
+      class: betonClass.value,
+      amount: Number(betonAmount.value)
+    });
+    e.target.reset();
+    render();
+  };
+
   render();
-}
-
-form.addEventListener("submit", e => {
-  e.preventDefault();
-
-  const desc = document.getElementById("desc").value.trim();
-  const amount = parseFloat(document.getElementById("amount").value);
-  const category = document.getElementById("category").value;
-  const date = document.getElementById("date").value;
-
-  if (!desc || !amount || !date) return;
-
-  expenses.push({ desc, amount, category, date });
-  save();
-  form.reset();
-  render();
-});
-
-render();
 </script>
 
 </body>
