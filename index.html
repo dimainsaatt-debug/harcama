@@ -1,172 +1,157 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dima İnşaat | Şantiye Takip</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<title>Dima İnşaat | Şantiye Yönetimi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-black text-white font-sans">
+<body class="bg-black text-white">
 
-  <!-- HEADER -->
-  <header class="border-b border-gray-700 p-6">
-    <h1 class="text-3xl font-bold tracking-wide">DİMA İNŞAAT</h1>
-    <p class="text-gray-400 mt-1">Şantiye Takip Sistemi • İç Kullanım</p>
-  </header>
+<!-- GİRİŞ -->
+<div id="login" class="min-h-screen flex items-center justify-center">
+  <div class="border border-gray-700 p-6 rounded-xl w-80">
+    <h2 class="text-xl font-bold mb-4">Dima İnşaat</h2>
+    <input id="pass" type="password" placeholder="Şifre"
+      class="w-full bg-black border border-gray-600 p-3 rounded mb-4">
+    <button onclick="login()" class="w-full border border-white p-3 rounded hover:bg-white hover:text-black">
+      Giriş
+    </button>
+  </div>
+</div>
 
-  <main class="max-w-6xl mx-auto p-6 space-y-10">
+<!-- UYGULAMA -->
+<div id="app" class="hidden">
 
-    <!-- ÖZET -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="border border-gray-700 p-5 rounded-xl">
-        <p class="text-gray-400 text-sm">Toplam Harcama</p>
-        <p id="totalExpense" class="text-2xl font-bold mt-1">₺0</p>
-      </div>
-      <div class="border border-gray-700 p-5 rounded-xl">
-        <p class="text-gray-400 text-sm">Toplam Kayıt</p>
-        <p id="expenseCount" class="text-2xl font-bold mt-1">0</p>
-      </div>
-      <div class="border border-gray-700 p-5 rounded-xl">
-        <p class="text-gray-400 text-sm">Toplam Beton</p>
-        <p id="totalConcrete" class="text-2xl font-bold mt-1">0 m³</p>
-      </div>
-    </section>
+<header class="border-b border-gray-700 p-6">
+  <h1 class="text-3xl font-bold">DİMA İNŞAAT</h1>
+  <p class="text-gray-400">Şantiye Yönetim Sistemi • İç Kullanım</p>
+</header>
 
-    <!-- HARCAMA EKLE -->
-    <section class="border border-gray-700 rounded-xl p-6">
-      <h2 class="text-xl font-semibold mb-4">Harcama Ekle</h2>
+<main class="max-w-7xl mx-auto p-6 space-y-12">
 
-      <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <input type="text" id="expDesc" placeholder="Açıklama" class="bg-black border border-gray-600 p-3 rounded" required>
-        <input type="number" id="expAmount" placeholder="Tutar (₺)" class="bg-black border border-gray-600 p-3 rounded" required>
-        <select id="expCategory" class="bg-black border border-gray-600 p-3 rounded">
-          <option>İnşaat Malzemesi</option>
-          <option>İşçilik</option>
-          <option>Beton</option>
-          <option>Demir</option>
-          <option>Nakliye</option>
-          <option>Elektrik</option>
-          <option>Su & Tesisat</option>
-          <option>Boya</option>
-          <option>Ruhsat & Resmi</option>
-          <option>Diğer</option>
-        </select>
-        <input type="date" id="expDate" class="bg-black border border-gray-600 p-3 rounded" required>
-        <button class="border border-white rounded p-3 hover:bg-white hover:text-black transition">Ekle</button>
-      </form>
-    </section>
+<!-- ÖZET -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="border border-gray-700 p-4 rounded">Toplam Harcama: <span id="sumExpense">₺0</span></div>
+  <div class="border border-gray-700 p-4 rounded">Toplam Beton: <span id="sumBeton">0 m³</span></div>
+  <div class="border border-gray-700 p-4 rounded">Toplam Demir: <span id="sumDemir">0 kg</span></div>
+</section>
 
-    <!-- HARCAMA LİSTESİ -->
-    <section class="border border-gray-700 rounded-xl overflow-hidden">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-900">
-          <tr>
-            <th class="p-3 text-left">Tarih</th>
-            <th class="p-3 text-left">Açıklama</th>
-            <th class="p-3 text-left">Kategori</th>
-            <th class="p-3 text-right">Tutar</th>
-          </tr>
-        </thead>
-        <tbody id="expenseList"></tbody>
-      </table>
-    </section>
+<!-- DEMİR DEFTERİ -->
+<section class="border border-gray-700 rounded p-6">
+<h2 class="text-xl mb-4">🧱 Demir Defteri</h2>
+<form id="demirForm" class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
+<input type="date" required id="dDate" class="input">
+<input placeholder="Kat / Bölge" required id="dArea" class="input">
+<select id="dType" class="input">
+<option>Ø8</option><option>Ø10</option><option>Ø12</option><option>Hasır</option>
+</select>
+<input type="number" placeholder="kg" required id="dKg" class="input">
+<input placeholder="Tedarikçi" id="dSup" class="input">
+<button class="btn">Ekle</button>
+</form>
+<table class="w-full text-sm"><tbody id="demirList"></tbody></table>
+</section>
 
-    <!-- BETON DÖKÜM DEFTERİ -->
-    <section class="border border-gray-700 rounded-xl p-6">
-      <h2 class="text-xl font-semibold mb-4">Beton Döküm Defteri</h2>
+<!-- İŞÇİLİK -->
+<section class="border border-gray-700 rounded p-6">
+<h2 class="text-xl mb-4">👷 İşçilik Takibi</h2>
+<form id="isciForm" class="grid grid-cols-1 md:grid-cols-7 gap-3 mb-4">
+<input placeholder="Usta" required id="iName" class="input">
+<input placeholder="İş Türü" required id="iJob" class="input">
+<input placeholder="Günlük / Parça" id="iType" class="input">
+<input type="number" placeholder="Hakediş" required id="iTotal" class="input">
+<input type="number" placeholder="Ödenen" required id="iPaid" class="input">
+<button class="btn col-span-2">Ekle</button>
+</form>
+<table class="w-full text-sm"><tbody id="isciList"></tbody></table>
+</section>
 
-      <form id="concreteForm" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <input type="date" id="betonDate" class="bg-black border border-gray-600 p-3 rounded" required>
-        <input type="text" id="betonArea" placeholder="Kat / Bölge" class="bg-black border border-gray-600 p-3 rounded" required>
-        <input type="text" id="betonClass" placeholder="C25 / C30" class="bg-black border border-gray-600 p-3 rounded">
-        <input type="number" id="betonAmount" placeholder="m³" class="bg-black border border-gray-600 p-3 rounded" required>
-        <button class="border border-white rounded p-3 hover:bg-white hover:text-black transition">Ekle</button>
-      </form>
+<!-- NAKLİYE -->
+<section class="border border-gray-700 rounded p-6">
+<h2 class="text-xl mb-4">🚚 Nakliye</h2>
+<form id="nakliyeForm" class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
+<input placeholder="Yük" required id="nLoad" class="input">
+<input placeholder="Nereden" required id="nFrom" class="input">
+<input placeholder="Nereye" required id="nTo" class="input">
+<input placeholder="Plaka" id="nPlate" class="input">
+<input type="number" placeholder="₺" required id="nPrice" class="input">
+<button class="btn">Ekle</button>
+</form>
+<table class="w-full text-sm"><tbody id="nakliyeList"></tbody></table>
+</section>
 
-      <table class="w-full text-sm">
-        <thead class="bg-gray-900">
-          <tr>
-            <th class="p-3 text-left">Tarih</th>
-            <th class="p-3 text-left">Bölge</th>
-            <th class="p-3 text-left">Sınıf</th>
-            <th class="p-3 text-right">m³</th>
-          </tr>
-        </thead>
-        <tbody id="concreteList"></tbody>
-      </table>
-    </section>
+<!-- ŞANTİYE GÜNLÜĞÜ -->
+<section class="border border-gray-700 rounded p-6">
+<h2 class="text-xl mb-4">🧠 Şantiye Günlüğü</h2>
+<form id="noteForm" class="flex gap-3 mb-4">
+<input type="date" required id="noteDate" class="input w-40">
+<input placeholder="Not" required id="noteText" class="input flex-1">
+<button class="btn">Ekle</button>
+</form>
+<ul id="noteList" class="space-y-2"></ul>
+</section>
 
-  </main>
+</main>
+</div>
+
+<style>
+.input{background:black;border:1px solid #555;padding:10px;border-radius:6px}
+.btn{border:1px solid white;padding:10px;border-radius:6px}
+</style>
 
 <script>
-  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-  const concretes = JSON.parse(localStorage.getItem("concretes")) || [];
+const db = k => JSON.parse(localStorage.getItem(k)||"[]");
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 
-  const expenseList = document.getElementById("expenseList");
-  const concreteList = document.getElementById("concreteList");
+let demir=db("demir"), isci=db("isci"), nakliye=db("nakliye"), notes=db("notes");
 
-  function render() {
-    expenseList.innerHTML = "";
-    concreteList.innerHTML = "";
+function login(){
+  const p=pass.value;
+  if(!localStorage.getItem("pw")) localStorage.setItem("pw",p);
+  if(p===localStorage.getItem("pw")){
+    loginDiv.style.display="none"; app.classList.remove("hidden");
+    render();
+  } else alert("Şifre yanlış");
+}
 
-    let total = 0;
-    expenses.forEach(e => {
-      total += e.amount;
-      expenseList.innerHTML += `
-        <tr class="border-t border-gray-800">
-          <td class="p-3">${e.date}</td>
-          <td class="p-3">${e.desc}</td>
-          <td class="p-3">${e.cat}</td>
-          <td class="p-3 text-right">₺${e.amount}</td>
-        </tr>`;
-    });
+const loginDiv=document.getElementById("login");
 
-    let betonToplam = 0;
-    concretes.forEach(b => {
-      betonToplam += b.amount;
-      concreteList.innerHTML += `
-        <tr class="border-t border-gray-800">
-          <td class="p-3">${b.date}</td>
-          <td class="p-3">${b.area}</td>
-          <td class="p-3">${b.class}</td>
-          <td class="p-3 text-right">${b.amount}</td>
-        </tr>`;
-    });
+function render(){
+  demirList.innerHTML="";
+  let dSum=0;
+  demir.forEach((x,i)=>{
+    dSum+=x.kg;
+    demirList.innerHTML+=`<tr><td>${x.date}</td><td>${x.area}</td><td>${x.type}</td><td>${x.kg}</td>
+    <td>${x.sup||""}</td><td><button onclick="del('demir',${i})">Sil</button></td></tr>`;
+  });
+  sumDemir.innerText=dSum+" kg";
 
-    document.getElementById("totalExpense").innerText = "₺" + total;
-    document.getElementById("expenseCount").innerText = expenses.length;
-    document.getElementById("totalConcrete").innerText = betonToplam + " m³";
+  isciList.innerHTML="";
+  isci.forEach((x,i)=>{
+    isciList.innerHTML+=`<tr><td>${x.name}</td><td>${x.job}</td>
+    <td>Kalan: ${x.total-x.paid}</td><td><button onclick="del('isci',${i})">Sil</button></td></tr>`;
+  });
 
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-    localStorage.setItem("concretes", JSON.stringify(concretes));
+  nakliyeList.innerHTML="";
+  nakliye.forEach((x,i)=>{
+    nakliyeList.innerHTML+=`<tr><td>${x.load}</td><td>${x.from}→${x.to}</td><td>${x.price}</td>
+    <td><button onclick="del('nakliye',${i})">Sil</button></td></tr>`;
+  });
+
+  noteList.innerHTML="";
+  notes.forEach((x,i)=>{
+    noteList.innerHTML+=`<li>${x.date} - ${x.text} <button onclick="del('notes',${i})">Sil</button></li>`;
+  });
+}
+
+function del(k,i){
+  if(confirm("Silinsin mi?")){
+    let arr=db(k); arr.splice(i,1); save(k,arr);
+    location.reload();
   }
-
-  document.getElementById("expenseForm").onsubmit = e => {
-    e.preventDefault();
-    expenses.push({
-      desc: expDesc.value,
-      amount: Number(expAmount.value),
-      cat: expCategory.value,
-      date: expDate.value
-    });
-    e.target.reset();
-    render();
-  };
-
-  document.getElementById("concreteForm").onsubmit = e => {
-    e.preventDefault();
-    concretes.push({
-      date: betonDate.value,
-      area: betonArea.value,
-      class: betonClass.value,
-      amount: Number(betonAmount.value)
-    });
-    e.target.reset();
-    render();
-  };
-
-  render();
+}
 </script>
 
 </body>
