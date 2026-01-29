@@ -6,7 +6,7 @@
   <title>İnşaat Harcama Takibi</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="theme-color" content="#ea580c">
+  <meta name="theme-color" content="#000000">
 
   <style>
     body {
@@ -15,66 +15,73 @@
   </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen p-6">
+<body class="bg-black text-white min-h-screen p-6">
 
-<div class="max-w-5xl mx-auto space-y-8">
+<div class="max-w-6xl mx-auto space-y-10">
 
   <!-- HEADER -->
   <div>
-    <h1 class="text-3xl font-bold text-orange-500">🏗️ İnşaat Harcama Takibi</h1>
-    <p class="text-slate-400">Projene ait tüm giderleri tek yerde topla</p>
+    <h1 class="text-3xl font-bold tracking-tight">İNŞAAT HARCAMA TAKİBİ</h1>
+    <p class="text-gray-400 mt-1">Sade • Güçlü • Profesyonel</p>
   </div>
 
   <!-- ÖZET -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div class="bg-slate-800/80 backdrop-blur p-5 rounded-2xl border border-slate-700">
-      <p class="text-slate-400 text-sm">Toplam Harcama</p>
-      <p id="totalAmount" class="text-2xl font-bold text-orange-500">₺0</p>
+    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
+      <p class="text-gray-400 text-sm">Toplam Harcama</p>
+      <p id="totalAmount" class="text-2xl font-semibold">₺0</p>
     </div>
-    <div class="bg-slate-800/80 backdrop-blur p-5 rounded-2xl border border-slate-700">
-      <p class="text-slate-400 text-sm">Kayıt Sayısı</p>
-      <p id="totalCount" class="text-2xl font-bold text-sky-400">0</p>
+    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
+      <p class="text-gray-400 text-sm">Kayıt Sayısı</p>
+      <p id="totalCount" class="text-2xl font-semibold">0</p>
     </div>
-    <div class="bg-slate-800/80 backdrop-blur p-5 rounded-2xl border border-slate-700">
-      <p class="text-slate-400 text-sm">En Yüksek Harcama</p>
-      <p id="maxAmount" class="text-2xl font-bold text-amber-400">₺0</p>
+    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
+      <p class="text-gray-400 text-sm">En Yüksek Harcama</p>
+      <p id="maxAmount" class="text-2xl font-semibold">₺0</p>
     </div>
   </div>
 
   <!-- FORM -->
-  <div class="bg-slate-800/80 backdrop-blur p-6 rounded-2xl border border-slate-700">
-    <h2 class="text-lg font-semibold mb-4">➕ Yeni Harcama Ekle</h2>
+  <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
+    <h2 class="text-lg font-medium mb-4">Yeni Harcama Ekle</h2>
 
-    <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <form id="expenseForm" class="grid grid-cols-1 md:grid-cols-6 gap-4">
       <input id="desc" type="text" placeholder="Açıklama"
-        class="bg-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500"/>
+        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white"/>
 
       <input id="amount" type="number" placeholder="Tutar ₺"
-        class="bg-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500"/>
+        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white"/>
 
       <select id="category"
-        class="bg-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500">
-        <option value="Malzeme">🧱 Malzeme</option>
-        <option value="İşçilik">👷 İşçilik</option>
-        <option value="Nakliye">🚚 Nakliye</option>
-        <option value="Alet">🔧 Alet / Ekipman</option>
-        <option value="Resmi">📄 Ruhsat / Vergi</option>
-        <option value="Diğer">📦 Diğer</option>
+        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white">
+        <option>Malzeme</option>
+        <option>İşçilik</option>
+        <option>Nakliye</option>
+        <option>Beton</option>
+        <option>Demir</option>
+        <option>Elektrik</option>
+        <option>Su / Tesisat</option>
+        <option>Isı Yalıtımı</option>
+        <option>Çatı</option>
+        <option>Kaplama</option>
+        <option>Ruhsat / Vergi</option>
+        <option>Proje / Mimarlık</option>
+        <option>Diğer</option>
       </select>
 
       <input id="date" type="date"
-        class="bg-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500"/>
+        class="bg-black border border-neutral-700 rounded-xl px-4 py-3 outline-none focus:border-white"/>
 
-      <button class="bg-orange-600 hover:bg-orange-500 rounded-xl font-semibold">
+      <button class="md:col-span-2 bg-white text-black rounded-xl font-semibold hover:bg-gray-200">
         Ekle
       </button>
     </form>
   </div>
 
   <!-- TABLO -->
-  <div class="bg-slate-800/80 backdrop-blur rounded-2xl border border-slate-700 overflow-hidden">
-    <table class="w-full">
-      <thead class="bg-slate-700 text-slate-300 text-sm">
+  <div class="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-neutral-800 text-gray-300">
         <tr>
           <th class="p-4 text-left">Açıklama</th>
           <th class="p-4 text-left">Kategori</th>
@@ -99,15 +106,6 @@ const maxAmountEl = document.getElementById("maxAmount");
 
 let expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
 
-const categoryStyle = {
-  "Malzeme": "🧱 text-orange-400",
-  "İşçilik": "👷 text-sky-400",
-  "Nakliye": "🚚 text-emerald-400",
-  "Alet": "🔧 text-purple-400",
-  "Resmi": "📄 text-amber-400",
-  "Diğer": "📦 text-slate-400"
-};
-
 function save() {
   localStorage.setItem("expenses", JSON.stringify(expenses));
 }
@@ -128,15 +126,15 @@ function render() {
       if (e.amount > max) max = e.amount;
 
       const tr = document.createElement("tr");
-      tr.className = "border-t border-slate-700 hover:bg-slate-700/40 transition";
+      tr.className = "border-t border-neutral-800 hover:bg-neutral-800/50 transition";
 
       tr.innerHTML = `
         <td class="p-4">${e.desc}</td>
-        <td class="p-4 ${categoryStyle[e.category]}">${e.category}</td>
-        <td class="p-4 text-slate-400">${e.date}</td>
-        <td class="p-4 text-right font-semibold text-orange-400">${formatTL(e.amount)}</td>
+        <td class="p-4 text-gray-300">${e.category}</td>
+        <td class="p-4 text-gray-500">${e.date}</td>
+        <td class="p-4 text-right font-medium">${formatTL(e.amount)}</td>
         <td class="p-4 text-center">
-          <button onclick="removeItem(${i})" class="text-red-400 hover:text-red-300">✖</button>
+          <button onclick="removeItem(${i})" class="text-gray-500 hover:text-white">✕</button>
         </td>
       `;
       list.appendChild(tr);
